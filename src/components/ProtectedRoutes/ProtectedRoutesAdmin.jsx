@@ -15,7 +15,7 @@ export default function ProtectedRoutesAdmin() {
   useEffect(() => {
     axios
       .get(
-        `https://clinic-ashen.vercel.app/auth/${localStorage.getItem(
+        `${process.env.REACT_APP_MONGO_DB_CLUSTER}/auth/${localStorage.getItem(
           "userId-dentist-clinic"
         )}`,
         {

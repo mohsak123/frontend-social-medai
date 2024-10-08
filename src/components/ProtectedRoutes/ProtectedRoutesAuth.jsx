@@ -15,9 +15,9 @@ export default function ProtectedRoutesAuth() {
     if (token) {
       axios
         .get(
-          `http://localhost:4000/api/users/profile/${localStorage.getItem(
-            "user-id-social-media"
-          )}`,
+          `${
+            process.env.REACT_APP_MONGO_DB_CLUSTER
+          }/api/users/profile/${localStorage.getItem("user-id-social-media")}`,
           {
             headers: {
               Authorization: `Token ${localStorage.getItem(
