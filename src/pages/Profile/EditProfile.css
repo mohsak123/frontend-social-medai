@@ -1,0 +1,55 @@
+.input-update,
+.button-update {
+  width: 500px;
+  border-radius: 10px;
+  outline: none;
+  padding: 12px 20px;
+  height: 55px;
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 16px;
+  font-size: 18px;
+}
+
+.input-update.textarea {
+  resize: none;
+  height: 120px;
+
+  scrollbar-width: none;
+}
+
+::placeholder {
+  color: #aaa;
+}
+
+.input-update:focus {
+  border-color: #7784e8 !important;
+}
+
+.input-update:focus::placeholder {
+  color: #7784e8;
+}
+
+.button-update {
+  color: white;
+  font-size: 20px;
+  border: none;
+  transition: 0.3s;
+}
+
+.button-update:hover {
+  background-color: #3f51b5 !important;
+}
+
+/* 
+  5861d5
+  7784e8
+  b6a9eb
+*/
+
+@media (max-width: 599px) {
+  .input-update,
+  .button-update {
+    width: 99%;
+  }
+}

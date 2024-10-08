@@ -1,0 +1,89 @@
+.input-register,
+.button-register {
+  width: 500px;
+  border-radius: 30px;
+  outline: none;
+  padding: 12px 20px;
+  height: 55px;
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 12px;
+  font-size: 18px;
+}
+
+.input-register.textarea {
+  resize: none;
+  height: 120px;
+  border-radius: 22px;
+  scrollbar-width: none;
+}
+
+/* textarea {
+  scrollbar-color: #333 #ccc;
+}
+
+textarea::-webkit-scrollbar {
+  width: 10px;
+}
+
+textarea::-webkit-scrollbar-thumb {
+  background-color: #333;
+} */
+
+::placeholder {
+  color: #aaa;
+}
+
+.input-register:focus {
+  border-color: #7784e8 !important;
+}
+
+.input-register.textarea:hover {
+  border-color: #7784e8 !important;
+}
+
+.input-register:focus::placeholder {
+  color: #7784e8;
+}
+
+.button-register {
+  color: white;
+  font-size: 20px;
+  border: none;
+  transition: 0.3s;
+}
+
+.button-register:hover {
+  background-color: #3f51b5 !important;
+}
+
+/* 
+  5861d5
+  7784e8
+  b6a9eb
+*/
+
+@media (max-width: 599px) {
+  .input-register,
+  .button-register {
+    width: 90%;
+  }
+}
+
+.image-register {
+  animation: img infinite ease-in-out 5s;
+}
+
+@keyframes img {
+  0% {
+    transform: scale(1); /* الحجم الطبيعي */
+  }
+
+  50% {
+    transform: scale(1.1); /* تكبير العنصر إلى 1.5 من حجمه */
+  }
+
+  100% {
+    transform: scale(1); /* العودة للحجم الطبيعي */
+  }
+}

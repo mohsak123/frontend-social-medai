@@ -1,0 +1,147 @@
+.create-post-input,
+.create-post-btn,
+.delete-post-btn {
+  width: 500px;
+  border-radius: 8px;
+  outline: none;
+  padding: 12px 20px;
+  height: 55px;
+  border-width: 1px;
+  border-style: solid;
+  margin-top: 10px;
+  font-size: 18px;
+}
+
+.create-post-error {
+  width: 500px;
+}
+
+.create-post-input:nth-child(1) {
+  margin-top: 0;
+}
+
+.create-post-input-file {
+  width: 500px;
+}
+
+.create-post-textarea {
+  resize: none;
+  height: 120px;
+  border-radius: 22px;
+  scrollbar-width: none;
+}
+
+.create-post-input.textarea {
+  resize: none;
+  height: 200px;
+  scrollbar-width: none;
+}
+
+.create-post-input-file {
+  height: 200px;
+}
+
+::placeholder {
+  color: #aaa;
+}
+
+.create-post-input:focus {
+  border-color: #7784e8 !important;
+}
+
+.create-post-input:focus::placeholder {
+  color: #7784e8;
+}
+
+.create-post-btn,
+.delete-post-btn {
+  color: white;
+  font-size: 20px;
+  border: none;
+  transition: 0.3s;
+}
+
+.create-post-btn:hover {
+  background-color: #3f51b5 !important;
+}
+
+.delete-post-btn:hover {
+  background-color: rgb(211, 47, 47) !important;
+}
+
+.create-post-img {
+  animation: post-img ease-in-out 5s infinite;
+}
+
+@media (max-width: 1499px) {
+  .left-side {
+    flex: 6 !important;
+  }
+
+  .right-side {
+    flex: 6 !important;
+  }
+
+  .create-post-input,
+  .create-post-btn,
+  .delete-post-btn,
+  .create-post-input-file,
+  .create-post-error {
+    width: 99% !important;
+  }
+}
+
+@media (max-width: 1199px) {
+  .left-side {
+    flex: 12 !important;
+  }
+
+  .right-side {
+    flex: 0 !important;
+  }
+
+  .create-post-input,
+  .create-post-btn,
+  .delete-post-btn,
+  .create-post-input-file,
+  .create-post-error {
+    width: 90% !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .left-side {
+    flex: 12 !important;
+  }
+
+  .right-side {
+    flex: 0 !important;
+  }
+
+  .create-post-input.textarea,
+  .create-post-input-file {
+    height: 155px;
+  }
+
+  .create-post-input,
+  .create-post-btn,
+  .delete-post-btn,
+  .create-post-input-file,
+  .create-post-error {
+    width: 99% !important;
+  }
+}
+
+@keyframes post-img {
+  0% {
+    transform: translateY(40px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
+
+  100% {
+    transform: translateY(40px);
+  }
+}

@@ -1,0 +1,250 @@
+.settings {
+  width: 350px;
+  height: calc(100vh - 50px);
+  position: fixed;
+  background-color: var(--bg-nav);
+  right: 0;
+  top: 50px;
+  z-index: 998;
+  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  color: var(--main-secondary-color);
+  padding: 15px 20px;
+  transition: 0.5s;
+}
+
+.settings svg {
+  right: 20px;
+  top: 15px;
+  font-size: 35px;
+  cursor: pointer;
+  position: absolute;
+  transition: 0.3s;
+}
+
+.settings svg:hover {
+  color: var(--main-color-font);
+}
+
+.color-settings,
+.theme-settings {
+  margin-top: 30px;
+}
+
+.color-settings .colors {
+  display: flex;
+  justify-content: space-between;
+  padding: 0 15px;
+}
+
+.color-settings .colors .color {
+  list-style: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--my-color);
+  cursor: pointer;
+}
+
+.color-settings .colors .color.active {
+  border: 2px solid var(--main-secondary-color);
+}
+
+.theme-settings .themes {
+  padding: 0 10px;
+}
+
+.navbar {
+  height: 50px;
+  position: fixed !important;
+  width: 100vw;
+  height: 50px;
+  top: 0;
+  background-color: var(--bg-nav);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 1px 4px;
+  z-index: 1000;
+}
+
+.navbar .navbar-links .links {
+  list-style: none;
+  color: var(--main-secondary-color);
+  margin: 0;
+  padding: 0;
+  font-size: 23px;
+  letter-spacing: 1px;
+}
+
+.navbar .navbar-links .links .link {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  cursor: pointer;
+  transition: 0.3s;
+  font-weight: 600;
+}
+
+.navbar .navbar-links .links .link.active {
+  color: var(--main-color-font);
+  font-weight: 500;
+}
+
+.navbar .navbar-links .links .link:nth-child(1) {
+  padding: 0 20px 0 0;
+}
+
+.navbar .navbar-links .links .link:hover {
+  color: var(--main-color-font);
+}
+
+.navbar .navbar-links .links .link p {
+  margin: 0 0 0 3px;
+}
+
+.navbar .navbar-profile {
+  color: white;
+  position: relative;
+}
+
+.navbar .navbar-profile .profile-img {
+  width: 38px;
+  height: 38px;
+  overflow: hidden;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.navbar .navbar-profile .profile-img img {
+  width: 100%;
+  height: 100%;
+}
+
+.profile-drawer {
+  position: absolute;
+  list-style: none;
+  top: 60px;
+  left: -155px;
+  padding: 10px 15px;
+  margin: 0;
+  list-style: none;
+  background-color: var(--bg-nav);
+  width: 180px;
+  border-radius: 10px;
+  letter-spacing: 1px;
+  font-weight: 500;
+  transition: 0.3s;
+  z-index: 999;
+  color: var(--main-secondary-color);
+  box-shadow: 0 1px 0 2px rgba(0, 0, 0, 0.1);
+}
+
+.profile-drawer .profile-link {
+  display: flex;
+  align-items: center;
+  font-size: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.profile-drawer .profile-link:hover {
+  color: var(--main-color-font);
+}
+
+.profile-drawer .profile-link:not(:nth-child(1)) {
+  margin-top: 10px;
+}
+
+.profile-drawer .profile-link svg {
+  margin-top: 1px;
+}
+
+.profile-drawer .profile-link p {
+  margin: 0;
+  padding-left: 8px;
+}
+
+@media (max-width: 991px) {
+  .navbar .navbar-links .links {
+    font-size: 20px;
+  }
+
+  .navbar .navbar-profile .profile-img {
+    width: 35px;
+    height: 35px;
+  }
+}
+
+@media (max-width: 767px) {
+  .navbar-container {
+    gap: 20px !important;
+  }
+
+  .navbar .navbar-links .links {
+    font-size: 18px;
+  }
+
+  .navbar .navbar-profile .profile-img {
+    width: 30px;
+    height: 30px;
+  }
+}
+
+@media (max-width: 575px) {
+  .navbar-container {
+    gap: 0px !important;
+  }
+
+  .navbar .navbar-links .links {
+    font-size: 24px;
+    justify-content: flex-start !important;
+  }
+
+  .navbar .navbar-links .links .link {
+    padding: 0 50px;
+  }
+
+  .navbar .navbar-links .links .link:nth-child(1) {
+    padding: 0 50px 0 0;
+  }
+
+  .navbar .navbar-links .links .link p {
+    display: none;
+  }
+
+  .navbar-profile {
+    padding: 0 0 0 50px;
+  }
+
+  .navbar .navbar-profile .profile-img {
+    width: 32px;
+    height: 32px;
+  }
+
+  .navbar .navbar-profile .profile-drawer {
+    top: 55px;
+    left: -110px;
+    padding: 10px 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  .navbar .navbar-links .links .link {
+    padding: 0 30px;
+  }
+
+  .navbar .navbar-links .links .link:nth-child(1) {
+    padding: 0 30px 0 0;
+  }
+
+  .navbar-profile {
+    display: flex;
+    justify-content: flex-end;
+    padding: 0 0 0 30px;
+  }
+
+  .navbar .navbar-profile .profile-drawer {
+    top: 55px;
+    left: -130px;
+    padding: 10px 15px;
+  }
+}

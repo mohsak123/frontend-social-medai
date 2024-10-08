@@ -1,0 +1,26 @@
+.add-comment-input {
+  border-radius: 8px;
+  outline: none;
+  padding: 12px 20px;
+  height: 55px;
+  border-width: 2px;
+  border-style: solid;
+  font-size: 18px;
+  flex: 1;
+  letter-spacing: 1px;
+  resize: none;
+  scrollbar-width: none;
+}
+
+.add-comment-input:focus {
+  border-color: #7784e8 !important;
+}
+
+@media (max-width: 599px) {
+  .add-comment-input {
+    height: 50px;
+    border-width: 1px;
+    padding: 12px 15px;
+    font-size: 16px;
+  }
+}

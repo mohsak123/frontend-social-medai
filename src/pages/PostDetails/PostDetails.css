@@ -1,0 +1,16 @@
+.edit-post-input {
+  border: 1px solid;
+}
+
+.edit-post-input:focus {
+  border-color: #7784e8 !important;
+}
+
+.edit-post-textarea {
+  resize: none;
+  outline: none;
+}
+
+.edit-post-textarea:focus {
+  border-color: #7784e8 !important;
+}
