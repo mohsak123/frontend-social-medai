@@ -38,9 +38,9 @@ const CreatePost = ({ drawerWidth }) => {
   const onSubmit = (e) => {
     console.log(postPhoto.image);
     dispatch(createPost(title, description, postPhoto?.image));
-    // reset();
-    // setPostPhoto(initialPartnerState);
-    // setImage(null);
+    reset();
+    setPostPhoto(initialPartnerState);
+    setImage(null);
   };
 
   const { loading } = useSelector((state) => state.createPost);
