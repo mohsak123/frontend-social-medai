@@ -73,12 +73,12 @@ const PostCard = ({ post, index }) => {
         }
         subheader={moment(post?.createdAt).fromNow()}
       />
-      {post?.postPhoto?.url !== "" ? (
+      {post?.postPhoto !== "" ? (
         <div>
           <Divider sx={{ borderColor: "gray" }} variant="middle" />
           <CardMedia
             component="img"
-            image={post?.postPhoto?.url}
+            image={post?.postPhoto}
             alt="Paella dish"
             sx={{
               height: { xs: "auto", sm: "300px" },

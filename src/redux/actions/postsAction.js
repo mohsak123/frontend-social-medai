@@ -48,30 +48,33 @@ export const getSinglePost = (id) => async (dispatch) => {
   }
 };
 
-export const createPost = (formData) => async (dispatch) => {
-  try {
-    dispatch({ type: CREATE_POST_REQUEST });
+export const createPost =
+  (title, description, postPhoto) => async (dispatch) => {
+    try {
+      dispatch({ type: CREATE_POST_REQUEST });
 
-    const data = await axios.post(
-      `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/posts/post`,
-      formData,
-      {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,
-        },
-      }
-    );
-    notifySuccess(data.data.message);
+      const data = await axios.post(
+        `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/posts/post`,
+        { title, description, postPhoto },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem(
+              "token-social-media"
+            )}`,
+          },
+        }
+      );
+      notifySuccess(data.data.message);
 
-    setTimeout(() => {
-      window.location.href = "/";
-    }, 3000);
+      setTimeout(() => {
+        window.location.href = "/";
+      }, 3000);
 
-    dispatch({ type: CREATE_POST_SUCCESS, payload: data });
-  } catch (error) {
-    dispatch({ type: CREATE_POST_FAIL, payload: error });
-  }
-};
+      dispatch({ type: CREATE_POST_SUCCESS, payload: data });
+    } catch (error) {
+      dispatch({ type: CREATE_POST_FAIL, payload: error });
+    }
+  };
 
 export const updatePost = (id, title, description) => async (dispatch) => {
   try {

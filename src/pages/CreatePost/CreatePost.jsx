@@ -14,9 +14,18 @@ const CreatePost = ({ drawerWidth }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
 
+  const initialPartnerState = {
+    image: {
+      name: "",
+      type: "",
+    },
+  };
+
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
-  const [postPhoto, setPostPhoto] = useState(null);
+  const [postPhoto, setPostPhoto] = useState(initialPartnerState);
+  const [file, setFile] = useState(null); // Add file state
+  const [image, setImage] = useState(null);
 
   const {
     register,
@@ -26,23 +35,57 @@ const CreatePost = ({ drawerWidth }) => {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = () => {
-    const formData = new FormData();
-
-    formData.append("title", title);
-    formData.append("description", description);
-
-    if (postPhoto) {
-      formData.append("postImage", postPhoto);
-    }
-
-    dispatch(createPost(formData));
-
-    reset();
-    setPostPhoto(null);
+  const onSubmit = (e) => {
+    console.log(postPhoto.image);
+    dispatch(createPost(title, description, postPhoto?.image));
+    // reset();
+    // setPostPhoto(initialPartnerState);
+    // setImage(null);
   };
 
   const { loading } = useSelector((state) => state.createPost);
+
+  // Added handleFileChange function
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+    setImage(selectedFile);
+    setPostPhoto((prevPostPhoto) => ({
+      ...prevPostPhoto,
+      image: { ...prevPostPhoto.image, type: selectedFile?.type },
+    })); // Set the postPhoto state
+
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (typeof event.target?.result === "string") {
+          setFile(event.target.result);
+          const base64 = event.target.result.split(",")[1];
+          setPostPhoto((prevPostPhoto) => ({
+            ...prevPostPhoto,
+            image: { ...prevPostPhoto.image, name: base64 },
+          }));
+        }
+        console.log(true);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const cancelImage = () => {
+    setFile("");
+    setImage(null);
+    setPostPhoto((prevPostPhoto) => ({
+      ...prevPostPhoto,
+      image: { ...prevPostPhoto.image, type: "" },
+    }));
+
+    setPostPhoto((prevPostPhoto) => ({
+      ...prevPostPhoto,
+      image: { ...prevPostPhoto.image, name: "" },
+    }));
+  };
 
   return (
     <Box
@@ -197,7 +240,7 @@ const CreatePost = ({ drawerWidth }) => {
               </Box>
 
               <label
-                for="post-img"
+                htmlFor="post-img"
                 style={{
                   marginTop: "8px",
                   cursor: "pointer",
@@ -205,11 +248,7 @@ const CreatePost = ({ drawerWidth }) => {
                 className="create-post-input-file"
               >
                 <Avatar
-                  src={
-                    postPhoto === null
-                      ? postCover
-                      : URL.createObjectURL(postPhoto)
-                  }
+                  src={image === null ? postCover : URL.createObjectURL(image)}
                   sx={{
                     width: "100%",
                     height: "100%",
@@ -219,13 +258,13 @@ const CreatePost = ({ drawerWidth }) => {
                 />
               </label>
 
-              {postPhoto !== null ? (
+              {postPhoto.image.name !== "" ? (
                 <button
                   className="delete-post-btn"
                   style={{
                     backgroundColor: theme.palette.error.main,
                   }}
-                  onClick={() => setPostPhoto(null)}
+                  onClick={cancelImage}
                 >
                   Remove Img
                 </button>
@@ -235,10 +274,7 @@ const CreatePost = ({ drawerWidth }) => {
                 id="post-img"
                 type="file"
                 style={{ display: "none" }}
-                onChange={(e) => {
-                  setPostPhoto(e.target.files[0]);
-                  e.target.value = null; // Reset the input value to allow selecting the same image again
-                }}
+                onChange={handleFileChange} // Use handleFileChange here
               />
               <button
                 className="create-post-btn"
