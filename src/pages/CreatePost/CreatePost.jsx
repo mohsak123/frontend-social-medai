@@ -36,7 +36,6 @@ const CreatePost = ({ drawerWidth }) => {
   } = useForm();
 
   const onSubmit = (e) => {
-    console.log(postPhoto.image);
     dispatch(createPost(title, description, postPhoto?.image));
     reset();
     setPostPhoto(initialPartnerState);
