@@ -94,6 +94,8 @@ const PostDetails = ({ drawerWidth }) => {
 
   const { loading, post } = useSelector((state) => state.post);
 
+  console.log(post);
+
   const { loadingUpdatePost } = useSelector((state) => state.updatePost);
 
   const { loadingPostPhoto } = useSelector((state) => state.updatePhotoPost);
@@ -223,7 +225,7 @@ const PostDetails = ({ drawerWidth }) => {
           </Dialog>
 
           {/* Post Details */}
-          {post?.postPhoto?.url !== "" || postImage !== null ? (
+          {post?.postPhoto !== "" || postImage !== null ? (
             <Box
               sx={{
                 width: { xs: "100%", lg: "800px" },
@@ -241,9 +243,7 @@ const PostDetails = ({ drawerWidth }) => {
               >
                 <img
                   src={
-                    postImage
-                      ? URL.createObjectURL(postImage)
-                      : post?.postPhoto?.url
+                    postImage ? URL.createObjectURL(postImage) : post?.postPhoto
                   }
                   alt=""
                   style={{
