@@ -109,7 +109,7 @@ export const updatePhotoPost = (id, postImage) => async (dispatch) => {
 
     const data = await axios.put(
       `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/posts/update-image/${id}`,
-      postImage,
+      { postImage },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,

@@ -37,11 +37,19 @@ const PostDetails = ({ drawerWidth }) => {
 
   const [open, setOpen] = useState(false);
 
+  const initialPartnerState = {
+    image: {
+      name: "",
+      type: "",
+    },
+  };
+
   const [editedTitle, setEditedTitle] = useState("");
   const [editedDescription, setEditedDescription] = useState("");
   const [selectedPost, setSelectedPost] = useState(null);
-
-  const [postImage, setPostImage] = useState(null);
+  const [postImage, setPostImage] = useState(initialPartnerState);
+  const [file, setFile] = useState(null); // Add file state
+  const [image, setImage] = useState(null);
 
   const handleClickOpen = () => {
     setSelectedPost(post);
@@ -61,13 +69,12 @@ const PostDetails = ({ drawerWidth }) => {
   };
 
   const updatePhotoPostHandler = () => {
-    const formData = new FormData();
+    console.log(postImage);
 
-    formData.append("postImage", postImage);
+    dispatch(updatePhotoPost(params.id, postImage));
 
-    dispatch(updatePhotoPost(params.id, formData));
-
-    setPostImage(null);
+    // setPostImage(initialPartnerState);
+    setImage(null);
   };
 
   useEffect(() => {
@@ -94,8 +101,6 @@ const PostDetails = ({ drawerWidth }) => {
 
   const { loading, post } = useSelector((state) => state.post);
 
-  console.log(post);
-
   const { loadingUpdatePost } = useSelector((state) => state.updatePost);
 
   const { loadingPostPhoto } = useSelector((state) => state.updatePhotoPost);
@@ -107,6 +112,46 @@ const PostDetails = ({ drawerWidth }) => {
   const { loadingUpdateComment } = useSelector((state) => state.updateComment);
 
   const { loadingDeleteComment } = useSelector((state) => state.deleteComment);
+
+  const handleFileChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+    setImage(selectedFile);
+    setPostImage((prevPostImage) => ({
+      ...prevPostImage,
+      image: { ...prevPostImage.image, type: selectedFile?.type },
+    })); // Set the postPhoto state
+
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (typeof event.target?.result === "string") {
+          setFile(event.target.result);
+          const base64 = event.target.result.split(",")[1];
+          setPostImage((prevPostImage) => ({
+            ...prevPostImage,
+            image: { ...prevPostImage.image, name: base64 },
+          }));
+        }
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const cancelImage = () => {
+    setPostImage((prevPostImage) => ({
+      ...prevPostImage,
+      image: { ...prevPostImage.image, type: "" },
+    }));
+
+    setPostImage((prevPostImage) => ({
+      ...prevPostImage,
+      image: { ...prevPostImage.image, name: "" },
+    }));
+    setFile("");
+    setImage(null);
+  };
 
   return (
     <Box
@@ -242,9 +287,7 @@ const PostDetails = ({ drawerWidth }) => {
                 }}
               >
                 <img
-                  src={
-                    postImage ? URL.createObjectURL(postImage) : post?.postPhoto
-                  }
+                  src={image ? URL.createObjectURL(image) : post?.postPhoto}
                   alt=""
                   style={{
                     width: "100%",
@@ -252,7 +295,7 @@ const PostDetails = ({ drawerWidth }) => {
                   }}
                 />
               </Box>
-              {postImage ? (
+              {image ? (
                 <Box sx={{}}>
                   <Button
                     sx={{
@@ -289,7 +332,7 @@ const PostDetails = ({ drawerWidth }) => {
                         backgroundColor: theme.palette.error.main,
                       },
                     }}
-                    onClick={() => setPostImage(null)}
+                    onClick={cancelImage}
                   >
                     Remove
                   </Button>
@@ -432,7 +475,7 @@ const PostDetails = ({ drawerWidth }) => {
                       display: "none",
                     }}
                     onChange={(e) => {
-                      setPostImage(e.target.files[0]);
+                      handleFileChange(e);
                       e.target.value = null;
                     }}
                   />
