@@ -10,6 +10,7 @@ import {
   DialogContentText,
   DialogTitle,
   Slide,
+  CardMedia,
 } from "@mui/material";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
@@ -280,18 +281,19 @@ const PostDetails = ({ drawerWidth }) => {
             >
               <Box
                 sx={{
-                  height: { xs: "200px", sm: "350px", lg: "400px" },
+                  height: { xs: "auto", sm: "40vh" },
                   borderRadius: "5px",
                   overflow: "hidden",
-                  boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.4)",
+                  // boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.4)",
                 }}
               >
                 <img
                   src={image ? URL.createObjectURL(image) : post?.postPhoto}
                   alt=""
                   style={{
-                    width: "100%",
                     height: "100%",
+                    objectFit: "contain",
+                    width: "100%",
                   }}
                 />
               </Box>

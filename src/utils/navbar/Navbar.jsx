@@ -25,7 +25,7 @@ import Badge from "@mui/material/Badge";
 import { Menu, MenuItem } from "@mui/material";
 import Brightness5Icon from "@mui/icons-material/Brightness5";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
-import Brightness2Icon from "@mui/icons-material/Brightness2";
+import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import HomeIcon from "@mui/icons-material/Home";
 import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
@@ -257,7 +257,7 @@ const Navbar = (props) => {
     >
       <MenuItem onClick={handleModeChange}>
         <IconButton size="large" aria-label="show 4 new mails" color="inherit">
-          {mode === "light" ? <Brightness5Icon /> : <ModeNightIcon />}
+          {mode === "light" ? <WbSunnyIcon /> : <ModeNightIcon />}
         </IconButton>
         <Typography variant="p" component="p">
           Mode
@@ -346,7 +346,7 @@ const Navbar = (props) => {
               color="inherit"
               onClick={handleModeChange}
             >
-              {mode === "light" ? <Brightness5Icon /> : <ModeNightIcon />}
+              {mode === "light" ? <WbSunnyIcon /> : <ModeNightIcon />}
             </IconButton>
             <IconButton
               size="large"

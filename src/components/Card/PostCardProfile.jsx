@@ -73,12 +73,12 @@ const PostCardProfile = ({ post, user }) => {
         }
         subheader={moment(post?.createdAt).fromNow()}
       />
-      {post?.postPhoto?.url !== "" ? (
+      {post?.postPhoto !== "" ? (
         <div>
           <Divider sx={{ borderColor: "gray" }} variant="middle" />
           <CardMedia
             component="img"
-            image={post?.postPhoto?.url}
+            image={post?.postPhoto}
             alt="Paella dish"
             sx={{
               height: { xs: "auto", sm: "300px" },
@@ -109,7 +109,7 @@ const PostCardProfile = ({ post, user }) => {
             textOverflow: "ellipsis",
             display: "-webkit-box",
             WebkitBoxOrient: "vertical",
-            WebkitLineClamp: post?.postPhoto?.url !== "" ? 2 : 5,
+            WebkitLineClamp: post?.postPhoto !== "" ? 2 : 5,
             ml: 1,
           }}
         >

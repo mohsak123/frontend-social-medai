@@ -24,8 +24,21 @@ const Profile = ({ drawerWidth }) => {
   const params = useParams();
   const navigate = useNavigate();
 
-  const [profileImg, setProfileImg] = useState(null);
+  const initialProfileState = {
+    image: {
+      name: "",
+      type: "",
+    },
+  };
+
+  const [profileImg, setProfileImg] = useState(initialProfileState);
   const [bannerImg, setBannerImg] = useState(null);
+
+  const [fileProfile, setFileProfile] = useState(null);
+  const [imageProfile, setImageProfile] = useState(null);
+
+  const [fileBanner, setFileBanner] = useState(null);
+  const [imageBanner, setImageBanner] = useState(null);
 
   useEffect(() => {
     dispatch(getUserProfile(params.id));
@@ -44,17 +57,13 @@ const Profile = ({ drawerWidth }) => {
   const { loadingDelete } = useSelector((state) => state.deleteAccount);
 
   const uploadProfilePhotoHandler = () => {
-    if (profileImg === null) {
+    if (profileImg.image.name === "") {
       return notifyWarning("No File Provided");
     }
 
-    const formData = new FormData();
+    // dispatch(uploadProfileImg(formData));
 
-    formData.append("profileImage", profileImg);
-
-    dispatch(uploadProfileImg(formData));
-
-    setProfileImg(null);
+    setProfileImg(initialProfileState);
   };
 
   const uploadBannerPhotoHandler = () => {
@@ -87,6 +96,48 @@ const Profile = ({ drawerWidth }) => {
         swal("Your account is safe!");
       }
     });
+  };
+
+  // Added handleFileChange function
+  const handleFileProfileChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+    setImageProfile(selectedFile);
+    setProfileImg((prevProfileImg) => ({
+      ...prevProfileImg,
+      image: { ...prevProfileImg.image, type: selectedFile?.type },
+    })); // Set the postPhoto state
+
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (typeof event.target?.result === "string") {
+          setFileProfile(event.target.result);
+          const base64 = event.target.result.split(",")[1];
+          setProfileImg((prevProfileImg) => ({
+            ...prevProfileImg,
+            image: { ...prevProfileImg.image, name: base64 },
+          }));
+        }
+        console.log(true);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const cancelProfielImage = () => {
+    setFileProfile("");
+    setImageProfile(null);
+    setProfileImg((prevProfileImg) => ({
+      ...prevProfileImg,
+      image: { ...prevProfileImg.image, type: "" },
+    }));
+
+    setProfileImg((prevProfileImg) => ({
+      ...prevProfileImg,
+      image: { ...prevProfileImg.image, name: "" },
+    }));
   };
 
   return (
@@ -237,9 +288,9 @@ const Profile = ({ drawerWidth }) => {
               <Avatar
                 className="profilePhoto-img-profile"
                 src={
-                  profileImg
-                    ? URL.createObjectURL(profileImg)
-                    : user?.profilePhoto?.url
+                  imageProfile
+                    ? URL.createObjectURL(imageProfile)
+                    : user?.profilePhoto
                 }
                 sx={{
                   position: "absolute",
@@ -267,7 +318,6 @@ const Profile = ({ drawerWidth }) => {
                     color: "red",
                     backgroundColor: "#eee",
                     borderRadius: "50%",
-                    // fontSize: "35px",
                     width: { xs: "35px", sm: "40px" },
                     height: { xs: "35px", sm: "40px" },
                     border: "1px solid #aaa",
