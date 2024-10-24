@@ -144,9 +144,10 @@ const Login = ({ drawerWidth }) => {
               sx={{
                 position: "relative",
               }}
+              className="box-login"
             >
               <input
-                className="input-login"
+                className="input-login-password"
                 placeholder="password"
                 type={typeInput}
                 maxLength="20"
@@ -156,6 +157,7 @@ const Login = ({ drawerWidth }) => {
                     ? "red"
                     : theme.palette.mainColor.borderInput,
                   color: theme.palette.text.primary,
+                  width: "100%",
                 }}
                 error={Boolean(errors.password)}
                 {...register("password", {

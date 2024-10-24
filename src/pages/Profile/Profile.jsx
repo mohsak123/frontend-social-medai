@@ -304,7 +304,7 @@ const Profile = ({ drawerWidth }) => {
                 }}
               />
 
-              {profileImg !== null ? (
+              {imageProfile !== null ? (
                 <CancelIcon
                   sx={{
                     position: "absolute",

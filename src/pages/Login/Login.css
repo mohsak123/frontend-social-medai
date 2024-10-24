@@ -1,6 +1,6 @@
 .input-login,
-.button-login {
-  width: 500px;
+.button-login,
+.input-login-password {
   border-radius: 30px;
   outline: none;
   padding: 12px 20px;
@@ -9,6 +9,13 @@
   border-style: solid;
   margin-top: 16px;
   font-size: 18px;
+  position: relative;
+}
+
+.input-login,
+.button-login,
+.box-login {
+  width: 500px;
 }
 
 .input-login.textarea {
@@ -61,8 +68,9 @@ textarea::-webkit-scrollbar-thumb {
 
 @media (max-width: 599px) {
   .input-login,
-  .button-login {
-    width: 83%;
+  .button-login,
+  .box-login {
+    width: 90%;
   }
 }
 

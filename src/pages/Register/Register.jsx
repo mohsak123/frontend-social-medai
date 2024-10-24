@@ -185,9 +185,10 @@ const Register = ({ drawerWidth }) => {
               sx={{
                 position: "relative",
               }}
+              className="box-register"
             >
               <input
-                className="input-register"
+                className="input-register-password"
                 placeholder="password"
                 maxLength="20"
                 type={typeInput}
@@ -197,6 +198,7 @@ const Register = ({ drawerWidth }) => {
                     ? "red"
                     : theme.palette.mainColor.borderInput,
                   color: theme.palette.text.primary,
+                  width: "100%",
                 }}
                 error={Boolean(errors.password)}
                 {...register("password", {

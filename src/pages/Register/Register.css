@@ -1,6 +1,6 @@
 .input-register,
-.button-register {
-  width: 500px;
+.button-register,
+.input-register-password {
   border-radius: 30px;
   outline: none;
   padding: 12px 20px;
@@ -9,6 +9,12 @@
   border-style: solid;
   margin-top: 12px;
   font-size: 18px;
+}
+
+.input-register,
+.button-register,
+.box-register {
+  width: 500px;
 }
 
 .input-register.textarea {
@@ -65,7 +71,8 @@ textarea::-webkit-scrollbar-thumb {
 
 @media (max-width: 599px) {
   .input-register,
-  .button-register {
+  .button-register,
+  .box-register {
     width: 90%;
   }
 }
