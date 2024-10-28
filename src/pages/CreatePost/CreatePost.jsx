@@ -9,6 +9,7 @@ import { createPost } from "../../redux/actions/postsAction";
 import { useForm } from "react-hook-form";
 import Loader from "./../../utils/Loader/Loader";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { notifyWarning } from "../../utils/Toastify/Toastify";
 
 const CreatePost = ({ drawerWidth }) => {
   const theme = useTheme();
@@ -36,10 +37,25 @@ const CreatePost = ({ drawerWidth }) => {
   } = useForm();
 
   const onSubmit = (e) => {
-    dispatch(createPost(title, description, postPhoto?.image));
-    reset();
-    setPostPhoto(initialPartnerState);
-    setImage(null);
+    const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+
+    if (postPhoto.image.name !== "") {
+      if (validImageTypes.includes(image.type)) {
+        dispatch(createPost(title, description, postPhoto?.image));
+        reset();
+        setPostPhoto(initialPartnerState);
+        setImage(null);
+      } else {
+        return notifyWarning("The file is not image");
+      }
+    } else {
+      dispatch(createPost(title, description, postPhoto?.image));
+      reset();
+      setPostPhoto(initialPartnerState);
+      setImage(null);
+    }
+
+    console.log(image);
   };
 
   const { loading } = useSelector((state) => state.createPost);
