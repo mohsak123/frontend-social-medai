@@ -97,7 +97,7 @@ export const uploadProfileImg = (profileImage) => async (dispatch) => {
 
     const data = await axios.post(
       `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/users/profile/profile-photo-upload`,
-      profileImage,
+      { profileImage },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,
@@ -124,7 +124,7 @@ export const uploadBannerImg = (bannerImage) => async (dispatch) => {
 
     const data = await axios.post(
       `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/users/profile/banner-photo-upload`,
-      bannerImage,
+      { bannerImage },
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,

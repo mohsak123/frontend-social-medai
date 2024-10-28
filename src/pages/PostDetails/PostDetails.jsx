@@ -72,7 +72,7 @@ const PostDetails = ({ drawerWidth }) => {
   const updatePhotoPostHandler = () => {
     console.log(postImage);
 
-    dispatch(updatePhotoPost(params.id, postImage));
+    dispatch(updatePhotoPost(params.id, postImage.image));
 
     // setPostImage(initialPartnerState);
     setImage(null);

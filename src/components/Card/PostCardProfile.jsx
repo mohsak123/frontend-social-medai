@@ -54,7 +54,7 @@ const PostCardProfile = ({ post, user }) => {
           <Avatar
             sx={{ bgcolor: red[500] }}
             aria-label="recipe"
-            src={user?.profilePhoto?.url}
+            src={user?.profilePhoto}
           >
             {user.username.toUpperCase().substring(0, 1)}
           </Avatar>

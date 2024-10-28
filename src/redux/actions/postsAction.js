@@ -125,7 +125,8 @@ export const updatePhotoPost = (id, postImage) => async (dispatch) => {
       window.location.reload();
     }, 2000);
   } catch (error) {
-    notifyError(error.response.data.message);
+    console.log(error);
+    // notifyError(error.response.data.message);
     dispatch({ type: UPDATE_PHOTO_POST_FAIL, payload: error });
   }
 };

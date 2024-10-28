@@ -31,8 +31,15 @@ const Profile = ({ drawerWidth }) => {
     },
   };
 
+  const initialBannerState = {
+    image: {
+      name: "",
+      type: "",
+    },
+  };
+
   const [profileImg, setProfileImg] = useState(initialProfileState);
-  const [bannerImg, setBannerImg] = useState(null);
+  const [bannerImg, setBannerImg] = useState(initialBannerState);
 
   const [fileProfile, setFileProfile] = useState(null);
   const [imageProfile, setImageProfile] = useState(null);
@@ -61,23 +68,23 @@ const Profile = ({ drawerWidth }) => {
       return notifyWarning("No File Provided");
     }
 
-    // dispatch(uploadProfileImg(formData));
+    dispatch(uploadProfileImg(profileImg.image));
 
     setProfileImg(initialProfileState);
+
+    setImageProfile(null);
   };
 
   const uploadBannerPhotoHandler = () => {
-    if (bannerImg === null) {
+    if (bannerImg.image.name === "") {
       return notifyWarning("No File Provided");
     }
 
-    const formData = new FormData();
+    dispatch(uploadBannerImg(bannerImg.image));
 
-    formData.append("bannerImage", bannerImg);
+    setBannerImg(initialBannerState);
 
-    dispatch(uploadBannerImg(formData));
-
-    setBannerImg(null);
+    setImageBanner(null);
   };
 
   const handleDeleteAccount = (e) => {
@@ -98,9 +105,12 @@ const Profile = ({ drawerWidth }) => {
     });
   };
 
-  // Added handleFileChange function
+  /********* Profile **********/
+
+  // Added handleFileProfileChange function
   const handleFileProfileChange = (e) => {
     const selectedFile = e.target.files?.[0];
+    console.log(selectedFile);
     setImageProfile(selectedFile);
     setProfileImg((prevProfileImg) => ({
       ...prevProfileImg,
@@ -126,9 +136,9 @@ const Profile = ({ drawerWidth }) => {
     }
   };
 
-  const cancelProfielImage = () => {
-    setFileProfile("");
+  const cancelProfileImage = () => {
     setImageProfile(null);
+    setFileProfile("");
     setProfileImg((prevProfileImg) => ({
       ...prevProfileImg,
       image: { ...prevProfileImg.image, type: "" },
@@ -137,6 +147,49 @@ const Profile = ({ drawerWidth }) => {
     setProfileImg((prevProfileImg) => ({
       ...prevProfileImg,
       image: { ...prevProfileImg.image, name: "" },
+    }));
+  };
+
+  /********* Banner **********/
+
+  // Added handleFileBannerChange function
+  const handleFileBannerChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+    setImageBanner(selectedFile);
+    setBannerImg((prevBannerImg) => ({
+      ...prevBannerImg,
+      image: { ...prevBannerImg.image, type: selectedFile?.type },
+    })); // Set the postPhoto state
+
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (typeof event.target?.result === "string") {
+          setFileBanner(event.target.result);
+          const base64 = event.target.result.split(",")[1];
+          setBannerImg((prevBannerImg) => ({
+            ...prevBannerImg,
+            image: { ...prevBannerImg.image, name: base64 },
+          }));
+        }
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const cancelBannerImage = () => {
+    setImageBanner(null);
+    setFileBanner("");
+    setBannerImg((prevBannerImg) => ({
+      ...prevBannerImg,
+      image: { ...prevBannerImg.image, type: "" },
+    }));
+
+    setProfileImg((prevBannerImg) => ({
+      ...prevBannerImg,
+      image: { ...prevBannerImg.image, name: "" },
     }));
   };
 
@@ -184,7 +237,7 @@ const Profile = ({ drawerWidth }) => {
               <Avatar
                 className="banner-img-profile"
                 src={
-                  bannerImg ? URL.createObjectURL(bannerImg) : user?.banner?.url
+                  imageBanner ? URL.createObjectURL(imageBanner) : user?.banner
                 }
                 sx={{
                   backgroundColor: theme.palette.primary.dark,
@@ -195,7 +248,7 @@ const Profile = ({ drawerWidth }) => {
                 }}
               />
 
-              {bannerImg !== null ? (
+              {imageBanner !== null ? (
                 <CancelIcon
                   sx={{
                     position: "absolute",
@@ -211,7 +264,7 @@ const Profile = ({ drawerWidth }) => {
                     border: "1px solid #aaa",
                     cursor: "pointer",
                   }}
-                  onClick={() => setBannerImg(null)}
+                  onClick={cancelBannerImage}
                 />
               ) : null}
 
@@ -272,7 +325,7 @@ const Profile = ({ drawerWidth }) => {
                     type="file"
                     style={{ display: "none" }}
                     onChange={(e) => {
-                      setBannerImg(e.target.files[0]);
+                      handleFileBannerChange(e);
                       e.target.value = null;
                     }}
                   />
@@ -323,7 +376,7 @@ const Profile = ({ drawerWidth }) => {
                     border: "1px solid #aaa",
                     cursor: "pointer",
                   }}
-                  onClick={(e) => setProfileImg(null)}
+                  onClick={cancelProfileImage}
                 />
               ) : null}
 
@@ -376,7 +429,7 @@ const Profile = ({ drawerWidth }) => {
                 type="file"
                 style={{ display: "none" }}
                 onChange={(e) => {
-                  setProfileImg(e.target.files[0]);
+                  handleFileProfileChange(e);
                   e.target.value = null;
                 }}
               />

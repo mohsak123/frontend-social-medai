@@ -174,7 +174,8 @@ const CreatePost = ({ drawerWidth }) => {
                   error={Boolean(errors.title)}
                   {...register("title", {
                     required: true,
-                    minLength: 3,
+                    minLength: 1,
+                    maxLength: 256,
                     onChange: (e) => {
                       setTitle(e.target.value);
                     },
@@ -194,7 +195,7 @@ const CreatePost = ({ drawerWidth }) => {
                       padding: "0 10px",
                     }}
                   >
-                    title is required & min 3
+                    title is required & min 1 & max 256
                   </Typography>
                 )}
               </Box>
@@ -273,7 +274,10 @@ const CreatePost = ({ drawerWidth }) => {
                 id="post-img"
                 type="file"
                 style={{ display: "none" }}
-                onChange={handleFileChange} // Use handleFileChange here
+                onChange={(e) => {
+                  handleFileChange(e);
+                  e.target.value = null;
+                }} // Use handleFileChange here
               />
               <button
                 className="create-post-btn"

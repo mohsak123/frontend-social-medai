@@ -43,6 +43,11 @@ const Login = ({ drawerWidth }) => {
 
   const { loading } = useSelector((state) => state.login);
 
+  const regEmail =
+    /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+  const regPassword = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*\W)(?=.{8,}).*$/;
+
   return (
     <Box
       sx={{
@@ -118,6 +123,7 @@ const Login = ({ drawerWidth }) => {
               error={Boolean(errors.email)}
               {...register("email", {
                 required: true,
+                pattern: regEmail,
                 onChange: (e) => {
                   setEmail(e.target.value);
                 },
@@ -130,7 +136,7 @@ const Login = ({ drawerWidth }) => {
                 component="div"
                 sx={{
                   textAlign: "left",
-                  width: "472px",
+                  width: { xs: "82%", sm: "472px" },
                   fontSize: "12px",
                   color: "#d32f2f",
                   margin: "3px 14px 0px",
@@ -162,6 +168,7 @@ const Login = ({ drawerWidth }) => {
                 error={Boolean(errors.password)}
                 {...register("password", {
                   required: true,
+                  pattern: regPassword,
                   minLength: 8,
                   onChange: (e) => {
                     setPassword(e.target.value);
@@ -175,7 +182,10 @@ const Login = ({ drawerWidth }) => {
                     position: "absolute",
                     right: "0",
                     top: "50%",
-                    transform: "translate(-10px,-30%)",
+                    transform:
+                      Boolean(errors.password) === true
+                        ? "translate(-10px,-80%)"
+                        : "translate(-10px,-30%)",
                   }}
                   onClick={() => setTypeInput("text")}
                 >
@@ -191,7 +201,10 @@ const Login = ({ drawerWidth }) => {
                     position: "absolute",
                     right: "0",
                     top: "50%",
-                    transform: "translate(-10px,-30%)",
+                    transform:
+                      Boolean(errors.password) === true
+                        ? "translate(-10px,-80%)"
+                        : "translate(-10px,-30%)",
                   }}
                   onClick={() => setTypeInput("password")}
                 >
@@ -209,13 +222,14 @@ const Login = ({ drawerWidth }) => {
                   component="div"
                   sx={{
                     textAlign: "left",
-                    width: "472px",
+                    // width: { xs: "90%", sm: "472px" },
                     fontSize: "12px",
                     color: "#d32f2f",
                     margin: "3px 14px 0px",
                   }}
                 >
-                  Password is required & min 8
+                  Password is required & min 8 and Contain lower and upper
+                  letter and Punctuation characters
                 </Typography>
               )}
             </Box>

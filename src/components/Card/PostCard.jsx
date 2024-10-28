@@ -53,7 +53,7 @@ const PostCard = ({ post, index }) => {
           <Avatar
             sx={{ bgcolor: red[500], cursor: "pointer" }}
             aria-label="recipe"
-            src={post?.user?.profilePhoto?.url}
+            src={post?.user?.profilePhoto}
             onClick={() => navigate(`/userprofile/${post?.user?.id}`)}
           >
             {post?.user?.username.toUpperCase().substring(0, 1)}

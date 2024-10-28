@@ -13,6 +13,7 @@ import Loader from "./../../utils/Loader/Loader";
 import { notifyWarning } from "../../utils/Toastify/Toastify";
 import CameraAltIcon from "@mui/icons-material/CameraAlt";
 import { grey } from "@mui/material/colors";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 const UserProfile = ({ drawerWidth }) => {
   const params = useParams();
@@ -25,34 +26,151 @@ const UserProfile = ({ drawerWidth }) => {
     dispatch(getUserProfile(params.id));
   }, []);
 
-  const [profileImg, setProfileImg] = useState(null);
-  const [bannerImg, setBannerImg] = useState(null);
+  const initialProfileState = {
+    image: {
+      name: "",
+      type: "",
+    },
+  };
+
+  const initialBannerState = {
+    image: {
+      name: "",
+      type: "",
+    },
+  };
+
+  const [profileImg, setProfileImg] = useState(initialProfileState);
+  const [bannerImg, setBannerImg] = useState(initialBannerState);
+
+  const [fileProfile, setFileProfile] = useState(null);
+  const [imageProfile, setImageProfile] = useState(null);
+
+  const [fileBanner, setFileBanner] = useState(null);
+  const [imageBanner, setImageBanner] = useState(null);
 
   const uploadProfilePhotoHandler = () => {
-    if (profileImg === null) {
+    if (profileImg.image.name === "") {
       return notifyWarning("No File Provided");
     }
 
-    const formData = new FormData();
+    dispatch(uploadProfileImg(profileImg.image));
 
-    formData.append("profileImage", profileImg);
+    setProfileImg(initialProfileState);
 
-    dispatch(uploadProfileImg(formData));
+    setImageProfile(null);
   };
 
   const uploadBannerPhotoHandler = () => {
-    if (bannerImg === null) {
+    if (bannerImg.image.name === "") {
       return notifyWarning("No File Provided");
     }
 
-    const formData = new FormData();
+    dispatch(uploadBannerImg(bannerImg.image));
 
-    formData.append("bannerImage", bannerImg);
+    setBannerImg(initialBannerState);
 
-    dispatch(uploadBannerImg(formData));
+    setImageBanner(null);
   };
 
   const { loading, user } = useSelector((state) => state.user);
+
+  const { loadingUploadProfileImg } = useSelector(
+    (state) => state.uploadImgProfile
+  );
+
+  const { loadingUploadImgBanner } = useSelector(
+    (state) => state.uploadImgBanner
+  );
+
+  const { loadingDelete } = useSelector((state) => state.deleteAccount);
+
+  /********* Profile **********/
+
+  // Added handleFileProfileChange function
+  const handleFileProfileChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+    setImageProfile(selectedFile);
+    setProfileImg((prevProfileImg) => ({
+      ...prevProfileImg,
+      image: { ...prevProfileImg.image, type: selectedFile?.type },
+    })); // Set the postPhoto state
+
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (typeof event.target?.result === "string") {
+          setFileProfile(event.target.result);
+          const base64 = event.target.result.split(",")[1];
+          setProfileImg((prevProfileImg) => ({
+            ...prevProfileImg,
+            image: { ...prevProfileImg.image, name: base64 },
+          }));
+        }
+        console.log(true);
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const cancelProfileImage = () => {
+    setImageProfile(null);
+    setFileProfile("");
+    setProfileImg((prevProfileImg) => ({
+      ...prevProfileImg,
+      image: { ...prevProfileImg.image, type: "" },
+    }));
+
+    setProfileImg((prevProfileImg) => ({
+      ...prevProfileImg,
+      image: { ...prevProfileImg.image, name: "" },
+    }));
+  };
+
+  /********* Banner **********/
+
+  // Added handleFileBannerChange function
+  const handleFileBannerChange = (e) => {
+    const selectedFile = e.target.files?.[0];
+    setImageBanner(selectedFile);
+    setBannerImg((prevBannerImg) => ({
+      ...prevBannerImg,
+      image: { ...prevBannerImg.image, type: selectedFile?.type },
+    })); // Set the postPhoto state
+
+    if (selectedFile) {
+      const reader = new FileReader();
+
+      reader.onload = (event) => {
+        if (typeof event.target?.result === "string") {
+          setFileBanner(event.target.result);
+          const base64 = event.target.result.split(",")[1];
+          setBannerImg((prevBannerImg) => ({
+            ...prevBannerImg,
+            image: { ...prevBannerImg.image, name: base64 },
+          }));
+        }
+      };
+
+      reader.readAsDataURL(selectedFile);
+    }
+  };
+
+  const cancelBannerImage = () => {
+    setImageBanner(null);
+    setFileBanner("");
+    setBannerImg((prevBannerImg) => ({
+      ...prevBannerImg,
+      image: { ...prevBannerImg.image, type: "" },
+    }));
+
+    setProfileImg((prevBannerImg) => ({
+      ...prevBannerImg,
+      image: { ...prevBannerImg.image, name: "" },
+    }));
+  };
 
   return (
     <Box
@@ -68,7 +186,11 @@ const UserProfile = ({ drawerWidth }) => {
         pr: 1.5,
       }}
     >
-      {loading === true ? (
+      {loading === true ||
+      loadingDelete === true ||
+      loadingUploadProfileImg === true ||
+      loadingUploadImgBanner === true ||
+      loadingDelete === true ? (
         <Box
           sx={{
             display: "flex",
@@ -94,7 +216,7 @@ const UserProfile = ({ drawerWidth }) => {
               <Avatar
                 className="banner-img-profile"
                 src={
-                  bannerImg ? URL.createObjectURL(bannerImg) : user?.banner?.url
+                  imageBanner ? URL.createObjectURL(imageBanner) : user?.banner
                 }
                 sx={{
                   backgroundColor: theme.palette.primary.dark,
@@ -104,6 +226,26 @@ const UserProfile = ({ drawerWidth }) => {
                   objectFit: "cover",
                 }}
               />
+
+              {imageBanner !== null ? (
+                <CancelIcon
+                  sx={{
+                    position: "absolute",
+                    left: "100%",
+                    top: "0%",
+                    transform: "translate(-80%,-25%)",
+                    zIndex: "100",
+                    color: "red",
+                    backgroundColor: "#eee",
+                    borderRadius: "50%",
+                    width: { xs: "35px", sm: "40px" },
+                    height: { xs: "35px", sm: "40px" },
+                    border: "1px solid #aaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={cancelBannerImage}
+                />
+              ) : null}
 
               {user?.id === localStorage.getItem("user-id-social-media") ? (
                 <div>
@@ -161,7 +303,10 @@ const UserProfile = ({ drawerWidth }) => {
                     id="banner-img"
                     type="file"
                     style={{ display: "none" }}
-                    onChange={(e) => setBannerImg(e.target.files[0])}
+                    onChange={(e) => {
+                      handleFileBannerChange(e);
+                      e.target.value = null;
+                    }}
                   />
                 </div>
               ) : null}
@@ -170,7 +315,11 @@ const UserProfile = ({ drawerWidth }) => {
             {/* profile photo */}
             <div style={{ position: "relative" }}>
               <Avatar
-                src={user?.profilePhoto?.url}
+                src={
+                  imageProfile
+                    ? URL.createObjectURL(imageProfile)
+                    : user?.profilePhoto
+                }
                 sx={{
                   position: "absolute",
                   width: { xs: "135px", sm: "175px", md: "200px" },
@@ -185,6 +334,29 @@ const UserProfile = ({ drawerWidth }) => {
                   backgroundColor: "#bdbdbd",
                 }}
               />
+
+              {imageProfile !== null ? (
+                <CancelIcon
+                  sx={{
+                    position: "absolute",
+                    left: "50%",
+                    top: "0%",
+                    transform: {
+                      xs: "translate(-160%,-1.5%)",
+                      sm: "translate(-200%,0%)",
+                    },
+                    zIndex: "100",
+                    color: "red",
+                    backgroundColor: "#eee",
+                    borderRadius: "50%",
+                    width: { xs: "35px", sm: "40px" },
+                    height: { xs: "35px", sm: "40px" },
+                    border: "1px solid #aaa",
+                    cursor: "pointer",
+                  }}
+                  onClick={cancelProfileImage}
+                />
+              ) : null}
 
               {user?.id === localStorage.getItem("user-id-social-media") ? (
                 <div>
@@ -242,7 +414,10 @@ const UserProfile = ({ drawerWidth }) => {
                     id="profile-img"
                     type="file"
                     style={{ display: "none" }}
-                    onChange={(e) => setProfileImg(e.target.files[0])}
+                    onChange={(e) => {
+                      handleFileProfileChange(e);
+                      e.target.value = null;
+                    }}
                   />
                 </div>
               ) : null}
