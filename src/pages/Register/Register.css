@@ -40,7 +40,8 @@ textarea::-webkit-scrollbar-thumb {
   color: #aaa;
 }
 
-.input-register:focus {
+.input-register:focus,
+.input-register-password:focus {
   border-color: #7784e8 !important;
 }
 
@@ -48,7 +49,8 @@ textarea::-webkit-scrollbar-thumb {
   border-color: #7784e8 !important;
 }
 
-.input-register:focus::placeholder {
+.input-register:focus::placeholder,
+.input-register-password:focus::placeholder {
   color: #7784e8;
 }
 

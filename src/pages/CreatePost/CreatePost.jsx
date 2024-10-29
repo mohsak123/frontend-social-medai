@@ -37,7 +37,12 @@ const CreatePost = ({ drawerWidth }) => {
   } = useForm();
 
   const onSubmit = (e) => {
-    const validImageTypes = ["image/jpeg", "image/png", "image/gif"];
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/jpg",
+    ];
 
     if (postPhoto.image.name !== "") {
       if (validImageTypes.includes(image.type)) {

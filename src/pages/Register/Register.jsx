@@ -139,7 +139,7 @@ const Register = ({ drawerWidth }) => {
                 component="div"
                 sx={{
                   textAlign: "left",
-                  width: "472px",
+                  width: { xs: "84%", sm: "472px" },
                   fontSize: "12px",
                   color: "#d32f2f",
                   margin: "3px 14px 0px",
@@ -177,7 +177,7 @@ const Register = ({ drawerWidth }) => {
                 component="div"
                 sx={{
                   textAlign: "left",
-                  width: "472px",
+                  width: { xs: "84%", sm: "472px" },
                   fontSize: "12px",
                   color: "#d32f2f",
                   margin: "3px 14px 0px",
@@ -200,7 +200,7 @@ const Register = ({ drawerWidth }) => {
                 type={typeInput}
                 style={{
                   backgroundColor: theme.palette.mainColor.input,
-                  borderColor: Boolean(errors.bio)
+                  borderColor: Boolean(errors.password)
                     ? "red"
                     : theme.palette.mainColor.borderInput,
                   color: theme.palette.text.primary,
@@ -263,7 +263,7 @@ const Register = ({ drawerWidth }) => {
                   component="div"
                   sx={{
                     textAlign: "left",
-                    width: "472px",
+                    width: { xs: "90%", sm: "472px" },
                     fontSize: "12px",
                     color: "#d32f2f",
                     margin: "3px 14px 0px",
@@ -302,7 +302,7 @@ const Register = ({ drawerWidth }) => {
                 component="div"
                 sx={{
                   textAlign: "left",
-                  width: "472px",
+                  width: { xs: "84%", sm: "472px" },
                   fontSize: "12px",
                   color: "#d32f2f",
                   margin: "3px 14px 0px",

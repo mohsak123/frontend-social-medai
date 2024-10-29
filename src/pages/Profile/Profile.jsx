@@ -68,11 +68,20 @@ const Profile = ({ drawerWidth }) => {
       return notifyWarning("No File Provided");
     }
 
-    dispatch(uploadProfileImg(profileImg.image));
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/jpg",
+    ];
 
-    setProfileImg(initialProfileState);
-
-    setImageProfile(null);
+    if (validImageTypes.includes(profileImg.image.type)) {
+      dispatch(uploadProfileImg(profileImg.image));
+      setProfileImg(initialProfileState);
+      setImageProfile(null);
+    } else {
+      return notifyWarning("The file is not image");
+    }
   };
 
   const uploadBannerPhotoHandler = () => {
@@ -80,11 +89,20 @@ const Profile = ({ drawerWidth }) => {
       return notifyWarning("No File Provided");
     }
 
-    dispatch(uploadBannerImg(bannerImg.image));
+    const validImageTypes = [
+      "image/jpeg",
+      "image/png",
+      "image/gif",
+      "image/jpg",
+    ];
 
-    setBannerImg(initialBannerState);
-
-    setImageBanner(null);
+    if (validImageTypes.includes(bannerImg.image.type)) {
+      dispatch(uploadBannerImg(bannerImg.image));
+      setBannerImg(initialBannerState);
+      setImageBanner(null);
+    } else {
+      return notifyWarning("The file is not image");
+    }
   };
 
   const handleDeleteAccount = (e) => {

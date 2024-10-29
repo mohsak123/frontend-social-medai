@@ -41,11 +41,13 @@ textarea::-webkit-scrollbar-thumb {
   color: #aaa;
 }
 
-.input-login:focus {
+.input-login:focus,
+.input-login-password:focus {
   border-color: #7784e8 !important;
 }
 
-.input-login:focus::placeholder {
+.input-login:focus::placeholder,
+.input-login-password:focus::placeholder {
   color: #7784e8;
 }
 
