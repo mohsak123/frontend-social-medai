@@ -15,6 +15,7 @@ import {
 } from "../constants/commentsConstants";
 
 import axios from "axios";
+import { getCommentsForOnePost } from "./postsAction";
 
 export const getAllComments = () => async (dispatch) => {
   try {
@@ -44,11 +45,12 @@ export const createNewComment = (text, postId) => async (dispatch) => {
       }
     );
 
-    notifySuccess(data.data.message);
+    // console.log(data);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    if (data.status === 201) {
+      notifySuccess(data.data.message);
+    }
+    dispatch(getCommentsForOnePost(postId));
 
     dispatch({ type: CREATE_COMMENT_SUCCESS, payload: data.comment });
   } catch (error) {
@@ -56,7 +58,7 @@ export const createNewComment = (text, postId) => async (dispatch) => {
   }
 };
 
-export const updateComment = (id, text) => async (dispatch) => {
+export const updateComment = (id, text, postId) => async (dispatch) => {
   try {
     dispatch({ type: UPDATE_COMMENT_REQUEST });
 
@@ -72,9 +74,7 @@ export const updateComment = (id, text) => async (dispatch) => {
 
     notifySuccess(data.data.message);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 2000);
+    dispatch(getCommentsForOnePost(postId));
 
     dispatch({
       type: UPDATE_COMMENT_SUCCESS,
@@ -87,7 +87,7 @@ export const updateComment = (id, text) => async (dispatch) => {
   }
 };
 
-export const deleteComment = (id) => async (dispatch) => {
+export const deleteComment = (id, postId) => async (dispatch) => {
   try {
     dispatch({ type: DELETE_COMMENT_REQUEST });
 
@@ -102,9 +102,11 @@ export const deleteComment = (id) => async (dispatch) => {
 
     notifySuccess(data.data.message);
 
-    setTimeout(() => {
-      window.location.reload();
-    }, 3000);
+    // setTimeout(() => {
+    //   window.location.reload();
+    // }, 3000);
+
+    dispatch(getCommentsForOnePost(postId));
 
     dispatch({ type: DELETE_COMMENT_SUCCESS, payload: data.data.message });
   } catch (error) {

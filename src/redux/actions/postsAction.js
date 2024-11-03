@@ -1,6 +1,10 @@
 import axios from "axios";
 
-import { notifyError, notifySuccess } from "./../../utils/Toastify/Toastify";
+import {
+  notifyError,
+  notifySuccess,
+  notifyWarning,
+} from "./../../utils/Toastify/Toastify";
 import {
   POST_REQUEST,
   POST_SUCCESS,
@@ -20,6 +24,12 @@ import {
   UPDATE_PHOTO_POST_REQUEST,
   UPDATE_PHOTO_POST_SUCCESS,
   UPDATE_PHOTO_POST_FAIL,
+  TOGGLE_LIKE_REQUEST,
+  TOGGLE_LIKE_SUCCESS,
+  TOGGLE_LIKE_FAIL,
+  GET_COMMENTS_FOR_POST_REQUEST,
+  GET_COMMENTS_FOR_POST_SUCCESS,
+  GET_COMMENTS_FOR_POST_FAIL,
 } from "../constants/postsConstants";
 
 export const getPosts = () => async (dispatch) => {
@@ -45,6 +55,28 @@ export const getSinglePost = (id) => async (dispatch) => {
     dispatch({ type: SINGLE_POST_SUCCESS, payload: data });
   } catch (error) {
     dispatch({ type: SINGLE_POST_FAIL, payload: error });
+  }
+};
+
+export const getCommentsForOnePost = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: GET_COMMENTS_FOR_POST_REQUEST });
+
+    const data = await axios.get(
+      `http://localhost:4000/api/posts/comments/${id}`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,
+        },
+      }
+    );
+
+    // console.log(data.data);
+
+    dispatch({ type: GET_COMMENTS_FOR_POST_SUCCESS, payload: data.data });
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: GET_COMMENTS_FOR_POST_FAIL, payload: error });
   }
 };
 
@@ -155,5 +187,28 @@ export const deletePost = (id) => async (dispatch) => {
     notifyError(error.response.data.message);
 
     dispatch({ type: DELETE_POST_FAIL, payload: error });
+  }
+};
+
+export const toggleLike = (id) => async (dispatch) => {
+  try {
+    dispatch({ type: TOGGLE_LIKE_REQUEST });
+
+    const data = await axios.put(
+      `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/posts/like/${id}`,
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,
+        },
+      }
+    );
+
+    dispatch({ type: TOGGLE_LIKE_SUCCESS, payload: data.data });
+
+    notifySuccess(data.data.message);
+  } catch (error) {
+    console.log(error);
+    dispatch({ type: TOGGLE_LIKE_FAIL, payload: error });
   }
 };

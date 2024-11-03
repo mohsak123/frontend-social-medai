@@ -5,8 +5,10 @@ import { thunk } from "redux-thunk";
 import {
   createPostReducer,
   deletePostReducer,
+  getCommentsForOnePostReducer,
   postsReducer,
   singlePostReducer,
+  toggleLikeReducer,
   updatePhotoPostReducer,
   updatePostReducer,
 } from "../redux/reducers/postsReducer";
@@ -31,9 +33,11 @@ const reducer = combineReducers({
   login: loginReducer,
   posts: postsReducer,
   post: singlePostReducer,
+  getCommentsForOnePost: getCommentsForOnePostReducer,
   createPost: createPostReducer,
   updatePost: updatePostReducer,
   updatePhotoPost: updatePhotoPostReducer,
+  toggleLike: toggleLikeReducer,
   updatePassword: updatePasswordReducer,
   deletePost: deletePostReducer,
   user: userReducer,

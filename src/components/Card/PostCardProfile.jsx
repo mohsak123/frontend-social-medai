@@ -5,19 +5,22 @@ import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Divider, useTheme } from "@mui/material";
 import { Box, Button } from "@mui/material";
 import moment from "moment";
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { useEffect } from "react";
+import { toggleLike } from "../../redux/actions/postsAction";
+import { notifyWarning } from "../../utils/Toastify/Toastify";
+import "./Card.css";
 
 const ExpandMore = styled((props) => {
   const { expand, ...other } = props;
@@ -31,14 +34,50 @@ const ExpandMore = styled((props) => {
 }));
 
 const PostCardProfile = ({ post, user }) => {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
-  const theme = useTheme();
+  const [isLiked, setIsLiked] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [likeCount, setLikeCount] = useState(post?.likes.length || 0);
+  const [isBouncing, setIsBouncing] = useState(false);
+  const userId = localStorage.getItem("user-id-social-media");
+
+  useEffect(() => {
+    const likedByUser = post?.likes.includes(userId);
+    setIsLiked(likedByUser);
+  }, [post, userId]);
+
+  useEffect(() => {
+    // Assuming the presence of user-id in localStorage means the user is authenticated
+    setIsAuthenticated(!!userId);
+  }, [userId]);
+
+  const toggleLikeHandler = (id) => {
+    const isconnected = navigator.onLine;
+
+    if (isconnected) {
+      if (isAuthenticated) {
+        setIsBouncing(true); // تشغيل التأثير
+        setLoading(true);
+
+        dispatch(toggleLike(id))
+          .then(() => {
+            setIsLiked(!isLiked);
+            setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+          })
+          .finally(() => {
+            setLoading(false);
+            setTimeout(() => setIsBouncing(false), 300); // إيقاف التأثير بعد 300 مللي ثانية
+          });
+      } else {
+        notifyWarning("You are not authenticated");
+      }
+    } else {
+      notifyWarning("You are not connected to internet");
+    }
+  };
 
   return (
     <Card
@@ -90,6 +129,17 @@ const PostCardProfile = ({ post, user }) => {
       ) : null}
 
       <CardContent>
+        {likeCount > 0 ? (
+          <Typography
+            sx={{
+              fontWeight: "600",
+              fontFamily:
+                "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+            }}
+          >
+            {likeCount} likes
+          </Typography>
+        ) : null}
         <Typography
           variant="p"
           component="p"
@@ -125,8 +175,17 @@ const PostCardProfile = ({ post, user }) => {
         }}
       >
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+          <IconButton
+            aria-label="add to favorites"
+            onClick={() => toggleLikeHandler(post?.id)}
+            disabled={loading}
+          >
+            <FavoriteIcon
+              sx={{
+                color: isLiked ? (loading ? "#ef5350" : "red") : null,
+                animation: isBouncing ? "likeBounce 0.3s ease" : null,
+              }}
+            />
           </IconButton>
           <IconButton aria-label="share">
             <ShareIcon />

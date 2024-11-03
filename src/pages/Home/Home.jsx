@@ -15,8 +15,6 @@ const Home = ({ drawerWidth }) => {
     dispatch(getPosts());
   }, []);
 
-  console.log(posts);
-
   return (
     <Box
       sx={{

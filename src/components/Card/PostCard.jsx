@@ -1,43 +1,69 @@
-import * as React from "react";
-import { styled, useTheme } from "@mui/material/styles";
+import React, { useState, useEffect } from "react";
+import { useTheme } from "@mui/material/styles";
 import Card from "@mui/material/Card";
 import CardHeader from "@mui/material/CardHeader";
 import CardMedia from "@mui/material/CardMedia";
 import CardContent from "@mui/material/CardContent";
 import CardActions from "@mui/material/CardActions";
-import Collapse from "@mui/material/Collapse";
 import Avatar from "@mui/material/Avatar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import { red } from "@mui/material/colors";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import ShareIcon from "@mui/icons-material/Share";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import MoreVertIcon from "@mui/icons-material/MoreVert";
 import { Box, Button, Divider } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import moment from "moment";
-
-const ExpandMore = styled((props) => {
-  const { expand, ...other } = props;
-  return <IconButton {...other} />;
-})(({ theme, expand }) => ({
-  transform: !expand ? "rotate(0deg)" : "rotate(180deg)",
-  marginLeft: "auto",
-  transition: theme.transitions.create("transform", {
-    duration: theme.transitions.duration.shortest,
-  }),
-}));
+import { toggleLike } from "../../redux/actions/postsAction";
+import { useDispatch } from "react-redux";
+import { notifyWarning } from "../../utils/Toastify/Toastify";
+import "./Card.css";
 
 const PostCard = ({ post, index }) => {
-  const [expanded, setExpanded] = React.useState(false);
-
-  const handleExpandClick = () => {
-    setExpanded(!expanded);
-  };
-
-  const theme = useTheme();
+  const [isLiked, setIsLiked] = useState(false);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
+  const [loading, setLoading] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [likeCount, setLikeCount] = useState(post?.likes.length || 0);
+  const [isBouncing, setIsBouncing] = useState(false);
+  const userId = localStorage.getItem("user-id-social-media");
+
+  useEffect(() => {
+    const likedByUser = post?.likes.includes(userId);
+    setIsLiked(likedByUser);
+  }, [post, userId]);
+
+  useEffect(() => {
+    // Assuming the presence of user-id in localStorage means the user is authenticated
+    setIsAuthenticated(!!userId);
+  }, [userId]);
+
+  const toggleLikeHandler = (id) => {
+    const isconnected = navigator.onLine;
+
+    if (isconnected) {
+      if (isAuthenticated) {
+        setIsBouncing(true); // تشغيل التأثير
+        setLoading(true);
+
+        dispatch(toggleLike(id))
+          .then(() => {
+            setIsLiked(!isLiked);
+            setLikeCount(isLiked ? likeCount - 1 : likeCount + 1);
+          })
+          .finally(() => {
+            setLoading(false);
+            setTimeout(() => setIsBouncing(false), 300); // إيقاف التأثير بعد 300 مللي ثانية
+          });
+      } else {
+        notifyWarning("You are not authenticated");
+      }
+    } else {
+      notifyWarning("You are not connected to internet");
+    }
+  };
 
   return (
     <Card
@@ -73,7 +99,7 @@ const PostCard = ({ post, index }) => {
         }
         subheader={moment(post?.createdAt).fromNow()}
       />
-      {post?.postPhoto !== "" ? (
+      {post?.postPhoto !== "" && (
         <div>
           <Divider sx={{ borderColor: "gray" }} variant="middle" />
           <CardMedia
@@ -87,9 +113,19 @@ const PostCard = ({ post, index }) => {
           />
           <Divider sx={{ borderColor: "gray" }} variant="middle" />
         </div>
-      ) : null}
-
+      )}
       <CardContent>
+        {likeCount > 0 ? (
+          <Typography
+            sx={{
+              fontWeight: "600",
+              fontFamily:
+                "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif",
+            }}
+          >
+            {likeCount} likes
+          </Typography>
+        ) : null}
         <Typography
           variant="p"
           component="p"
@@ -97,6 +133,7 @@ const PostCard = ({ post, index }) => {
             fontSize: { xs: "17px", sm: "24px" },
             fontWeight: "500",
             mb: 0.5,
+            mt: 1,
           }}
         >
           {post?.title}
@@ -125,9 +162,19 @@ const PostCard = ({ post, index }) => {
         }}
       >
         <CardActions disableSpacing>
-          <IconButton aria-label="add to favorites">
-            <FavoriteIcon />
+          <IconButton
+            aria-label="add to favorites"
+            onClick={() => toggleLikeHandler(post?.id)}
+            disabled={loading}
+          >
+            <FavoriteIcon
+              sx={{
+                color: isLiked ? (loading ? "#ef5350" : "red") : null,
+                animation: isBouncing ? "likeBounce 0.3s ease" : null,
+              }}
+            />
           </IconButton>
+
           <IconButton aria-label="share">
             <ShareIcon />
           </IconButton>

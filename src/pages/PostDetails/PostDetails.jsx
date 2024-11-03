@@ -74,7 +74,7 @@ const PostDetails = ({ drawerWidth }) => {
 
     dispatch(updatePhotoPost(params.id, postImage.image));
 
-    // setPostImage(initialPartnerState);
+    setPostImage(initialPartnerState);
     setImage(null);
   };
 
@@ -172,7 +172,6 @@ const PostDetails = ({ drawerWidth }) => {
       loadingUpdatePost === true ||
       loadingPostPhoto ||
       loadingDeletePost ||
-      loadingCreateComment ||
       loadingUpdateComment ||
       loadingDeleteComment ? (
         <Box
@@ -527,7 +526,7 @@ const PostDetails = ({ drawerWidth }) => {
               mt: 3,
             }}
           >
-            <Comments post={post} />
+            <Comments post={post} id={params.id} />
           </Box>
         </Box>
       )}

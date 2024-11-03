@@ -17,6 +17,12 @@ import {
   UPDATE_PHOTO_POST_REQUEST,
   UPDATE_PHOTO_POST_SUCCESS,
   UPDATE_PHOTO_POST_FAIL,
+  TOGGLE_LIKE_REQUEST,
+  TOGGLE_LIKE_SUCCESS,
+  TOGGLE_LIKE_FAIL,
+  GET_COMMENTS_FOR_POST_REQUEST,
+  GET_COMMENTS_FOR_POST_SUCCESS,
+  GET_COMMENTS_FOR_POST_FAIL,
 } from "../constants/postsConstants";
 
 export const postsReducer = (state = { posts: [] }, action) => {
@@ -58,6 +64,32 @@ export const singlePostReducer = (state = { post: {} }, action) => {
     case SINGLE_POST_FAIL:
       return {
         loading: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const getCommentsForOnePostReducer = (
+  state = { comments: [] },
+  action
+) => {
+  switch (action.type) {
+    case GET_COMMENTS_FOR_POST_REQUEST:
+      return {
+        loadingCommentsForOnePost: true,
+        comments: [],
+      };
+    case GET_COMMENTS_FOR_POST_SUCCESS:
+      return {
+        loadingCommentsForOnePost: false,
+        comments: action.payload,
+      };
+    case GET_COMMENTS_FOR_POST_FAIL:
+      return {
+        loadingCommentsForOnePost: false,
         error: action.payload,
       };
 
@@ -155,6 +187,31 @@ export const deletePostReducer = (state = { post: {} }, action) => {
     case DELETE_POST_FAIL:
       return {
         loadingDeletePost: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
+
+export const toggleLikeReducer = (state = { like: {} }, action) => {
+  switch (action.type) {
+    case TOGGLE_LIKE_REQUEST:
+      return {
+        loadingLike: true,
+        like: {},
+      };
+
+    case TOGGLE_LIKE_SUCCESS:
+      return {
+        loadingLike: false,
+        like: action.payload,
+      };
+
+    case TOGGLE_LIKE_FAIL:
+      return {
+        loadingLike: false,
         error: action.payload,
       };
 
