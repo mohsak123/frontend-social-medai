@@ -26,11 +26,16 @@ import {
   getCommentsReducer,
   updateCommentReducer,
 } from "./reducers/commentsReducer";
-import { loginReducer, registerReducer } from "./reducers/authReducer";
+import {
+  loginReducer,
+  registerReducer,
+  verifyEmailReducer,
+} from "./reducers/authReducer";
 
 const reducer = combineReducers({
   register: registerReducer,
   login: loginReducer,
+  verifyEmail: verifyEmailReducer,
   posts: postsReducer,
   post: singlePostReducer,
   getCommentsForOnePost: getCommentsForOnePostReducer,

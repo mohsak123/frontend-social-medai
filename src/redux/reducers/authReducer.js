@@ -8,6 +8,9 @@ import {
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  VERIFY_EMAIL_REQUEST,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_FAIL,
 } from "../constants/authConstants";
 
 export const loginReducer = (state = { user: {} }, action) => {
@@ -77,6 +80,28 @@ export const logOut = (state = { user: {} }, action) => {
         error: action.payload,
       };
 
+    default:
+      return state;
+  }
+};
+
+export const verifyEmailReducer = (state = { verify: {} }, action) => {
+  switch (action.type) {
+    case VERIFY_EMAIL_REQUEST:
+      return {
+        loadingVerify: true,
+        verify: {},
+      };
+    case VERIFY_EMAIL_SUCCESS:
+      return {
+        loadingVerify: false,
+        verify: action.payload,
+      };
+    case VERIFY_EMAIL_FAIL:
+      return {
+        loadingVerify: false,
+        error: action.payload,
+      };
     default:
       return state;
   }

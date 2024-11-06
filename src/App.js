@@ -16,6 +16,7 @@ import EditProfile from "./pages/Profile/EditProfile";
 import EditPassword from "./pages/Profile/EditPassword";
 import ProtectedRoutesUser from "./components/ProtectedRoutes/ProtectedRoutesUser";
 import ProtectedRoutesAuth from "./components/ProtectedRoutes/ProtectedRoutesAuth";
+import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 
 function App() {
   const [mode, setMode] = useState(
@@ -59,6 +60,11 @@ function App() {
           <Navbar mode={mode} setMode={setMode} />
           <Routes>
             <Route path="/" element={<Home drawerWidth={drawerWidth} />} />
+
+            <Route
+              path="/verifyEmail/:token"
+              element={<VerifyEmail drawerWidth={drawerWidth} />}
+            />
 
             <Route element={<ProtectedRoutesAuth />}>
               <Route

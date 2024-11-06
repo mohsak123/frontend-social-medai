@@ -9,6 +9,9 @@ import {
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
+  VERIFY_EMAIL_REQUEST,
+  VERIFY_EMAIL_SUCCESS,
+  VERIFY_EMAIL_FAIL,
 } from "../constants/authConstants";
 
 import axios from "axios";
@@ -83,4 +86,25 @@ export const logoutUser = () => async (dispatch) => {
   setTimeout(() => {
     window.location.href = "/";
   }, 3000);
+};
+
+export const verifyEmail = (emailToken) => async (dispatch) => {
+  try {
+    console.log(emailToken);
+    console.log(typeof emailToken);
+    dispatch({ type: VERIFY_EMAIL_REQUEST });
+
+    const data = await axios.post(
+      `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/auth/verifyEmail`,
+      {
+        emailToken,
+      }
+    );
+
+    dispatch({ type: VERIFY_EMAIL_SUCCESS, payload: data.data });
+
+    notifySuccess(data.data.message);
+  } catch (error) {
+    dispatch({ type: VERIFY_EMAIL_FAIL, payload: error.response });
+  }
 };
