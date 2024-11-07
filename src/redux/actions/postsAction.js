@@ -63,7 +63,7 @@ export const getCommentsForOnePost = (id) => async (dispatch) => {
     dispatch({ type: GET_COMMENTS_FOR_POST_REQUEST });
 
     const data = await axios.get(
-      `http://localhost:4000/api/posts/comments/${id}`,
+      `${process.env.REACT_APP_MONGO_DB_CLUSTER}/posts/comments/${id}`,
       {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,
