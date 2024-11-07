@@ -28,7 +28,7 @@ const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-const Comments = ({ id }) => {
+const Comments = ({ post, id }) => {
   const theme = useTheme();
   const dispatch = useDispatch();
   const params = useParams();
