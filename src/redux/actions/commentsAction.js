@@ -50,7 +50,7 @@ export const createNewComment = (text, postId) => async (dispatch) => {
     if (data.status === 201) {
       notifySuccess(data.data.message);
     }
-    dispatch(getCommentsForOnePost(postId));
+    await dispatch(getCommentsForOnePost(postId));
 
     dispatch({ type: CREATE_COMMENT_SUCCESS, payload: data.comment });
   } catch (error) {
