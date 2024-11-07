@@ -102,8 +102,6 @@ export const verifyEmail = (emailToken) => async (dispatch) => {
     );
 
     dispatch({ type: VERIFY_EMAIL_SUCCESS, payload: data.data });
-
-    notifySuccess(data.data.message);
   } catch (error) {
     dispatch({ type: VERIFY_EMAIL_FAIL, payload: error.response });
   }
