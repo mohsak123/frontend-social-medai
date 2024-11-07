@@ -1,11 +1,11 @@
 import { Box, Stack, Typography, useTheme } from "@mui/material";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import Swal from "sweetalert2";
 import "./VerifyEmail.css";
 import CheckCircleOutlinedIcon from "@mui/icons-material/CheckCircleOutlined";
 import { useDispatch, useSelector } from "react-redux";
 import Loader from "../../utils/Loader/Loader";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { verifyEmail } from "../../redux/actions/authAction";
 import ErrorOutlineIcon from "@mui/icons-material/ErrorOutline";
 
@@ -15,16 +15,30 @@ const VerifyEmail = ({ drawerWidth }) => {
   const { loadingVerify, verify, error } = useSelector(
     (state) => state.verifyEmail
   );
-
+  const navigate = useNavigate();
   const params = useParams();
 
-  // console.log(params.token);
-  // console.log(loadingVerify);
+  // Timer state
+  const [timer, setTimer] = useState(5);
 
-  console.log(error);
   useEffect(() => {
     dispatch(verifyEmail(params.token));
   }, [dispatch, params]);
+
+  // Countdown timer effect
+  useEffect(() => {
+    if (timer > 0) {
+      const intervalId = setInterval(() => {
+        setTimer((prevTimer) => prevTimer - 1);
+      }, 1000);
+
+      // Clear interval on unmount
+      return () => clearInterval(intervalId);
+    } else {
+      // Timer reached 0, navigate to another page or perform another action
+      navigate("/login");
+    }
+  }, [timer, navigate]);
 
   return (
     <Box
@@ -84,6 +98,19 @@ const VerifyEmail = ({ drawerWidth }) => {
               className="success"
             />
           )}
+          <Box>
+            <Typography
+              variant="h6"
+              sx={{
+                fontWeight: "bold",
+                fontSize: "20px",
+                color: "primary.main",
+                marginTop: 2,
+              }}
+            >
+              Redirecting to login in {timer} seconds...
+            </Typography>
+          </Box>
         </Stack>
       )}
     </Box>
