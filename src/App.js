@@ -17,6 +17,7 @@ import EditPassword from "./pages/Profile/EditPassword";
 import ProtectedRoutesUser from "./components/ProtectedRoutes/ProtectedRoutesUser";
 import ProtectedRoutesAuth from "./components/ProtectedRoutes/ProtectedRoutesAuth";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
+import Users from "./pages/Admin/Users/Users";
 
 function App() {
   const [mode, setMode] = useState(
@@ -109,6 +110,11 @@ function App() {
                 element={<PostDetails drawerWidth={drawerWidth} />}
               />
             </Route>
+
+            <Route
+              path="/dashboard/users"
+              element={<Users drawerWidth={drawerWidth} />}
+            />
           </Routes>
           <Footer drawerWidth={drawerWidth} />
         </BrowserRouter>

@@ -18,9 +18,31 @@ import {
   DELETE_ACCOUNT_REQUEST,
   DELETE_ACCOUNT_SUCCESS,
   DELETE_ACCOUNT_FAIL,
+  ALL_USERS_REQUEST,
+  ALL_USERS_SUCCESS,
+  ALL_USERS_FAIL,
 } from "../constants/userConstants";
 
 import axios from "axios";
+
+export const getAllUsers = () => async (dispatch) => {
+  try {
+    dispatch({ type: ALL_USERS_REQUEST });
+
+    const data = await axios.get(
+      `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/users`,
+      {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token-social-media")}`,
+        },
+      }
+    );
+
+    dispatch({ type: ALL_USERS_SUCCESS, payload: data.data });
+  } catch (error) {
+    dispatch({ type: ALL_USERS_FAIL, payload: error });
+  }
+};
 
 export const getUserProfile = (id) => async (dispatch) => {
   try {

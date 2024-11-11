@@ -17,7 +17,35 @@ import {
   DELETE_ACCOUNT_REQUEST,
   DELETE_ACCOUNT_SUCCESS,
   DELETE_ACCOUNT_FAIL,
+  ALL_USERS_REQUEST,
+  ALL_USERS_SUCCESS,
+  ALL_USERS_FAIL,
 } from "../constants/userConstants";
+
+export const allUsersReducer = (state = { users: null }, action) => {
+  switch (action.type) {
+    case ALL_USERS_REQUEST:
+      return {
+        loadingUsers: true,
+        users: null,
+      };
+
+    case ALL_USERS_SUCCESS:
+      return {
+        loadingUsers: false,
+        users: action.payload,
+      };
+
+    case ALL_USERS_FAIL:
+      return {
+        loadingUsers: false,
+        error: action.payload,
+      };
+
+    default:
+      return state;
+  }
+};
 
 export const userReducer = (state = { user: null }, action) => {
   switch (action.type) {

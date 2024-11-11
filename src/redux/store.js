@@ -13,6 +13,7 @@ import {
   updatePostReducer,
 } from "../redux/reducers/postsReducer";
 import {
+  allUsersReducer,
   deleteAccountReducer,
   updatePasswordReducer,
   updateUserProfileReducer,
@@ -45,6 +46,7 @@ const reducer = combineReducers({
   toggleLike: toggleLikeReducer,
   updatePassword: updatePasswordReducer,
   deletePost: deletePostReducer,
+  allUsers: allUsersReducer,
   user: userReducer,
   updateUserProfile: updateUserProfileReducer,
   uploadImgProfile: uploadImgProfileReducer,
