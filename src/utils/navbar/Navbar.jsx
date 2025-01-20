@@ -5,7 +5,6 @@ import CssBaseline from "@mui/material/CssBaseline";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import InboxIcon from "@mui/icons-material/MoveToInbox";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
@@ -23,7 +22,6 @@ import NotificationsIcon from "@mui/icons-material/Notifications";
 import MoreIcon from "@mui/icons-material/MoreVert";
 import Badge from "@mui/material/Badge";
 import { Menu, MenuItem } from "@mui/material";
-import Brightness5Icon from "@mui/icons-material/Brightness5";
 import ModeNightIcon from "@mui/icons-material/ModeNight";
 import WbSunnyIcon from "@mui/icons-material/WbSunny";
 import HomeIcon from "@mui/icons-material/Home";
@@ -90,18 +88,20 @@ const Navbar = (props) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(getUserProfile(localStorage.getItem("user-id-social-media")));
-  }, []);
+    const userId = localStorage.getItem("user-id-social-media");
+    if (userId) {
+      dispatch(getUserProfile(userId));
+    }
+  }, [dispatch, navigate]);
 
   const { user } = useSelector((state) => state.user);
 
-  console.log(user);
-
   useEffect(() => {
-    if (!user) {
-      dispatch(getUserProfile(localStorage.getItem("user-id-social-media")));
+    const userId = localStorage.getItem("user-id-social-media");
+    if (userId) {
+      dispatch(getUserProfile(userId));
     }
-  }, [dispatch, user]);
+  }, [dispatch]);
 
   const handleDrawerClose = () => {
     setIsClosing(true);

@@ -3,9 +3,6 @@ import {
   LOGIN_FAIL,
   LOGIN_REQUEST,
   LOGIN_SUCCESS,
-  LOGOUT_REQUEST,
-  LOGOUT_SUCCESS,
-  LOGOUT_FAIL,
   REGISTER_FAIL,
   REGISTER_REQUEST,
   REGISTER_SUCCESS,
@@ -82,7 +79,7 @@ export const registerUser =
 export const logoutUser = () => async (dispatch) => {
   localStorage.removeItem("token-social-media");
   localStorage.removeItem("user-id-social-media");
-  notifySuccess("Logout user is successfully");
+  notifySuccess("User logout succeeded");
   setTimeout(() => {
     window.location.href = "/";
   }, 3000);

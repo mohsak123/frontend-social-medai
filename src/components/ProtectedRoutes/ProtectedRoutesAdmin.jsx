@@ -1,41 +1,50 @@
 import { Box } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Loader from "./../../utils/Loader/Loader";
 
 export default function ProtectedRoutesAdmin() {
-  const [user, setUser] = useState("");
-
-  const token = localStorage.getItem("token-dentist-clinic");
-
+  const [user, setUser] = useState(null); // Start as null to differentiate between "loading" and "not loaded"
+  const [loading, setLoading] = useState(true); // Separate loading state
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get(
-        `${process.env.REACT_APP_MONGO_DB_CLUSTER}/auth/${localStorage.getItem(
-          "userId-dentist-clinic"
-        )}`,
-        {
-          headers: {
-            Authorization: `Token ${localStorage.getItem(
-              "token-dentist-clinic"
-            )}`,
-          },
-        }
-      )
-      .then((data) => setUser(data.data))
-      .catch(() => navigate("/login", { replace: true }));
-  }, []);
+  const token = localStorage.getItem("token-dentist-clinic");
+  const userId = localStorage.getItem("userId-dentist-clinic");
 
-  console.log(user);
+  useEffect(() => {
+    if (!token || !userId) {
+      navigate("/login", { replace: true });
+      return;
+    }
+
+    const fetchUserProfile = async () => {
+      try {
+        const { data } = await axios.get(
+          `${process.env.REACT_APP_MONGO_DB_CLUSTER}/api/users/profile/${userId}`,
+          {
+            headers: {
+              Authorization: `Token ${token}`,
+            },
+          }
+        );
+        setUser(data);
+      } catch (error) {
+        console.error("Error fetching user profile:", error);
+        navigate("/login", { replace: true });
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchUserProfile();
+  }, [navigate, token, userId]);
 
   const drawerWidth = 240;
 
-  return token ? (
-    user === "" ? (
+  if (loading) {
+    // Show loader while fetching user data
+    return (
       <Box
         sx={{
           ml: { xs: 0, md: `${drawerWidth}px` },
@@ -63,12 +72,14 @@ export default function ProtectedRoutesAdmin() {
           <Loader />
         </Box>
       </Box>
-    ) : user.is_staff === true ? (
-      <Outlet />
-    ) : (
-      <Navigate to={"/"} replace={true} />
-    )
-  ) : (
-    <Navigate to={"/login"} replace={true} />
-  );
+    );
+  }
+
+  if (!user?.isAdmin) {
+    // Redirect if user is not an admin
+    return <Navigate to="/" replace />;
+  }
+
+  // Render protected routes for admin
+  return <Outlet />;
 }

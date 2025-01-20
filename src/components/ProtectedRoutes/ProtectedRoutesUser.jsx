@@ -1,7 +1,6 @@
 import { Box } from "@mui/material";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
 import { Navigate, Outlet, useNavigate } from "react-router-dom";
 import Loader from "../../utils/Loader/Loader";
 
@@ -28,7 +27,7 @@ export default function ProtectedRoutesUser() {
       )
       .then((data) => setUser(data.data))
       .catch(() => navigate("/login", { replace: true }));
-  }, []);
+  }, [navigate]);
 
   const drawerWidth = 240;
 

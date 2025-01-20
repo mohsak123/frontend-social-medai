@@ -19,6 +19,7 @@ import ProtectedRoutesAuth from "./components/ProtectedRoutes/ProtectedRoutesAut
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import Users from "./pages/Admin/Users/Users";
 import GroupIcon from "@mui/icons-material/Group";
+import ProtectedRoutesAdmin from "./components/ProtectedRoutes/ProtectedRoutesAdmin";
 
 function App() {
   const [mode, setMode] = useState(
@@ -112,10 +113,12 @@ function App() {
               />
             </Route>
 
-            <Route
-              path="/dashboard/users"
-              element={<Users drawerWidth={drawerWidth} />}
-            />
+            <Route element={<ProtectedRoutesAdmin />}>
+              <Route
+                path="/dashboard/users"
+                element={<Users drawerWidth={drawerWidth} />}
+              />
+            </Route>
           </Routes>
           <Footer drawerWidth={drawerWidth} />
         </BrowserRouter>
