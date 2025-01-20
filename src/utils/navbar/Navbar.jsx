@@ -30,9 +30,14 @@ import HomeIcon from "@mui/icons-material/Home";
 import CreateIcon from "@mui/icons-material/Create";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/actions/authAction";
 import { ToastContainer } from "react-toastify";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import CommentIcon from "@mui/icons-material/Comment";
+import { useEffect } from "react";
+import { getUserProfile } from "../../redux/actions/userAction";
 
 const drawerWidth = 240;
 
@@ -84,6 +89,20 @@ const Navbar = (props) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    dispatch(getUserProfile(localStorage.getItem("user-id-social-media")));
+  }, []);
+
+  const { user } = useSelector((state) => state.user);
+
+  console.log(user);
+
+  useEffect(() => {
+    if (!user) {
+      dispatch(getUserProfile(localStorage.getItem("user-id-social-media")));
+    }
+  }, [dispatch, user]);
+
   const handleDrawerClose = () => {
     setIsClosing(true);
     setMobileOpen(false);
@@ -103,6 +122,16 @@ const Navbar = (props) => {
     { page: "Home", icon: <HomeIcon />, link: "/" },
     { page: "Create Post", icon: <CreateIcon />, link: "/createPost" },
     { page: "Favorite", icon: <FavoriteIcon />, link: "/favoritePost" },
+  ];
+
+  const linkArrayAdmin = [
+    { page: "Dashboard", icon: <DashboardIcon />, link: "/dashboard" },
+    {
+      page: "Users",
+      icon: <PeopleAltOutlinedIcon />,
+      link: "/dashboard/users",
+    },
+    { page: "Comments", icon: <CommentIcon />, link: "/dashboard/users" },
   ];
 
   const drawer = (
@@ -134,18 +163,23 @@ const Navbar = (props) => {
         ))}
       </List>
       <Divider sx={{ borderColor: "gray" }} />
-      {/* <List>
-        {["All mail", "Trash", "Spam"].map((text, index) => (
-          <ListItem key={text} disablePadding>
-            <ListItemButton>
-              <ListItemIcon>
-                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
-              </ListItemIcon>
-              <ListItemText primary={text} />
-            </ListItemButton>
-          </ListItem>
-        ))}
-      </List> */}
+      {user?.isAdmin === true ? (
+        <List>
+          {linkArrayAdmin.map((ele, index) => (
+            <ListItem key={index} disablePadding>
+              <ListItemButton
+                onClick={() => {
+                  navigate(ele.link);
+                  setMobileOpen(false);
+                }}
+              >
+                <ListItemIcon>{ele.icon}</ListItemIcon>
+                <ListItemText primary={ele.page} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      ) : null}
     </div>
   );
 

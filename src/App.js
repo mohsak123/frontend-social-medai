@@ -18,6 +18,7 @@ import ProtectedRoutesUser from "./components/ProtectedRoutes/ProtectedRoutesUse
 import ProtectedRoutesAuth from "./components/ProtectedRoutes/ProtectedRoutesAuth";
 import VerifyEmail from "./pages/VerifyEmail/VerifyEmail";
 import Users from "./pages/Admin/Users/Users";
+import GroupIcon from "@mui/icons-material/Group";
 
 function App() {
   const [mode, setMode] = useState(

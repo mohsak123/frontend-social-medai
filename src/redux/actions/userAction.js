@@ -38,6 +38,8 @@ export const getAllUsers = () => async (dispatch) => {
       }
     );
 
+    console.log(data);
+
     dispatch({ type: ALL_USERS_SUCCESS, payload: data.data });
   } catch (error) {
     dispatch({ type: ALL_USERS_FAIL, payload: error });
